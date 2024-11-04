@@ -20,66 +20,67 @@ public class Kasir_Interfaces extends javax.swing.JFrame {
 public Kasir_Interfaces() {
         initComponents();
     }
-private void insertPemesananToDatabase(String idObat, String namaObat, String stok, String harga, String deskripsi, String idEmpl) {
+private void insertPemesananToDatabase(String tanggal_pemesanan, String status, String jumlah, String totalharga, String id_karyawan) {
     // Koneksi database dan query INSERT ke tabel pemesanan
+    
     try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
-        String sql = "INSERT INTO pemesanan (id_obat, nama_obat, stok, harga, deskripsi, id_empl) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO pemesanan (tanggal_pemesanan, status, jumlah, totalharga, id_karyawan) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, idObat);
-        stmt.setString(2, namaObat);
-        stmt.setString(3, stok);
-        stmt.setString(4, harga);
-        stmt.setString(5, deskripsi);
-        stmt.setString(6, idEmpl);
+        stmt.setString(1, tanggal_pemesanan);
+        stmt.setString(2, status);
+        stmt.setString(3, jumlah);
+        stmt.setString(4, totalharga);
+        stmt.setString(5, id_karyawan);
+
         stmt.executeUpdate();
         JOptionPane.showMessageDialog(this, "Pemesanan berhasil disimpan");
     } catch (Exception ex) {
         ex.printStackTrace();
         JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
     }
-}
-
-    
+} 
 private void pemesananPopUp() {
-        JTextField idObatField = new JTextField();
-        JTextField namaObatField = new JTextField();
-        JTextField stokField = new JTextField();
-        JTextField hargaField = new JTextField();
-        JTextField deskripsiField = new JTextField();
-        JTextField idEmplField = new JTextField();
+      
+        JTextField tanggal_pemesananField = new JTextField();
+        JTextField statusField = new JTextField();
+        JTextField jumlahField = new JTextField();
+        JTextField totalhargaField = new JTextField(); 
+        JTextField id_karyawanField = new JTextField();
+
         
         Object[] message = {
-            "ID Obat:", idObatField,
-            "Nama Obat:", namaObatField,
-            "Stok:", stokField,
-            "Harga:", hargaField,
-            "Deskripsi:", deskripsiField,
-            "ID Empl:", idEmplField
+          
+            "tanggal:", tanggal_pemesananField,
+            "status:", statusField,
+            "jumlah:", jumlahField,
+            "total harga:", totalhargaField,
+            "id karyawan:", id_karyawanField,
+
+            
         };
 
         int option = JOptionPane.showConfirmDialog(this, message, "Pemesanan Obat", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
-            String idObat = idObatField.getText();
-            String namaObat = namaObatField.getText();
-            String stok = stokField.getText();
-            String harga = hargaField.getText();
-            String deskripsi = deskripsiField.getText();
-            String idEmpl = idEmplField.getText();
+          
+            String tanggal_pemesanan = tanggal_pemesananField.getText();
+            String status = statusField.getText();
+            String jumlah = jumlahField.getText();
+            String totalharga = totalhargaField.getText();
+            String id_karyawan = id_karyawanField.getText();
+
             
             // Sambungkan ke database
-            insertPemesananToDatabase(idObat, namaObat, stok, harga, deskripsi, idEmpl);
+            insertPemesananToDatabase( tanggal_pemesanan, status, jumlah, totalharga, id_karyawan);
         }
     }
 
 private void pembayaranPopUp() {
-        JTextField idPembayaranField = new JTextField();
         JTextField jumlahBayarField = new JTextField();
         JTextField tanggalBayarField = new JTextField();
         JTextField metodeBayarField = new JTextField();
         JTextField idEmplField = new JTextField();
 
         Object[] message = {
-            "ID Pembayaran:", idPembayaranField,
             "Jumlah Bayar:", jumlahBayarField,
             "Tanggal Bayar:", tanggalBayarField,
             "Metode Bayar:", metodeBayarField,
@@ -88,26 +89,23 @@ private void pembayaranPopUp() {
         
         int option = JOptionPane.showConfirmDialog(this, message, "Pembayaran", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
-            String idPembayaran = idPembayaranField.getText();
             String jumlahBayar = jumlahBayarField.getText();
             String tanggalBayar = tanggalBayarField.getText();
             String metodeBayar = metodeBayarField.getText();
             String idEmpl = idEmplField.getText();
 
             // Sambungkan ke database
-            insertPembayaranToDatabase(idPembayaran, jumlahBayar, tanggalBayar, metodeBayar, idEmpl);
+            insertPembayaranToDatabase(jumlahBayar, tanggalBayar, metodeBayar, idEmpl);
         }
     }
 
 private void laporanPopUp() {
-        JTextField idLaporanField = new JTextField();
         JTextField tanggalLaporanField = new JTextField();
         JTextField jenisLaporanField = new JTextField();
         JTextField isiLaporanField = new JTextField();
         JTextField idEmplField = new JTextField();
 
         Object[] message = {
-            "ID Laporan:", idLaporanField,
             "Tanggal Laporan:", tanggalLaporanField,
             "Jenis Laporan:", jenisLaporanField,
             "Isi Laporan:", isiLaporanField,
@@ -116,14 +114,13 @@ private void laporanPopUp() {
 
         int option = JOptionPane.showConfirmDialog(this, message, "Laporan", JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
-            String idLaporan = idLaporanField.getText();
             String tanggalLaporan = tanggalLaporanField.getText();
             String jenisLaporan = jenisLaporanField.getText();
             String isiLaporan = isiLaporanField.getText();
             String idEmpl = idEmplField.getText();
 
             // Sambungkan ke database
-            insertLaporanToDatabase(idLaporan, tanggalLaporan, jenisLaporan, isiLaporan, idEmpl);
+            insertlaporanToDatabase(tanggalLaporan, jenisLaporan, isiLaporan, idEmpl);
         }
     }
 
@@ -134,16 +131,15 @@ private void laporanPopUp() {
     }
 
 
-    private void insertPembayaranToDatabase(String idPembayaran, String jumlahBayar, String tanggalBayar, String metodeBayar, String idEmpl) {
+    private void insertPembayaranToDatabase(String jumlahBayar, String tanggalBayar, String metodeBayar, String idEmpl) {
         // Koneksi database dan query INSERT ke tabel pembayaran
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/database_apotek", "root", "password")) {
-            String sql = "INSERT INTO pembayaran (id_pembayaran, jumlah_bayar, tanggal_bayar, metode_bayar, id_empl) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+            String sql = "INSERT INTO pembayaran (jumlah_bayar, tanggal_bayar, metode_bayar, idEmpl) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, idPembayaran);
-            stmt.setString(2, jumlahBayar);
-            stmt.setString(3, tanggalBayar);
-            stmt.setString(4, metodeBayar);
-            stmt.setString(5, idEmpl);
+            stmt.setString(1, jumlahBayar);
+            stmt.setString(2, tanggalBayar);
+            stmt.setString(3, metodeBayar);
+            stmt.setString(4, idEmpl);
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "Pembayaran berhasil disimpan");
         } catch (Exception ex) {
@@ -152,16 +148,15 @@ private void laporanPopUp() {
         }
     }
 
-    private void insertLaporanToDatabase(String idLaporan, String tanggalLaporan, String jenisLaporan, String isiLaporan, String idEmpl) {
+    private void insertlaporanToDatabase(String tanggalLaporan, String jenisLaporan, String isiLaporan, String idEmpl) {
         // Koneksi database dan query INSERT ke tabel laporan
-        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/database_apotek", "root", "password")) {
-            String sql = "INSERT INTO laporan (id_laporan, tanggal_laporan, jenis_laporan, isi_laporan, id_empl) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+            String sql = "INSERT INTO laporan (tanggal_laporan, jenis_laporan, isi_laporan, idEmpl) VALUES (?, ?, ?, ?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, idLaporan);
-            stmt.setString(2, tanggalLaporan);
-            stmt.setString(3, jenisLaporan);
-            stmt.setString(4, isiLaporan);
-            stmt.setString(5, idEmpl);
+            stmt.setString(1, tanggalLaporan);
+            stmt.setString(2, jenisLaporan);
+            stmt.setString(3, isiLaporan);
+            stmt.setString(4, idEmpl);
             stmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "Laporan berhasil disimpan");
         } catch (Exception ex) {
@@ -220,12 +215,22 @@ pemesananButton.addActionListener(new ActionListener() {
         jButton2.setForeground(new java.awt.Color(255, 255, 204));
         jButton2.setText("Pembayaran");
         jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(0, 153, 0));
         jButton3.setFont(new java.awt.Font("Dubai Medium", 0, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(255, 255, 204));
         jButton3.setText("Lapor");
         jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(255, 255, 204));
         jButton4.setFont(new java.awt.Font("Dubai Medium", 1, 18)); // NOI18N
@@ -315,8 +320,20 @@ jButton1.addActionListener(new ActionListener() {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+this.dispose();
+    
+    // Create an instance of the Form_login and make it visible
+    Form_login loginForm = new Form_login();
+    loginForm.setVisible(true);        
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       laporanPopUp();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        pembayaranPopUp();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -4,6 +4,9 @@
  */
 package apotekku;
 import javax.swing.*;
+import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.awt.Font;
@@ -256,17 +259,130 @@ private void displayAllObat() {
 
 
 
+private void requestPopUp() {
+    // Create a panel for the input fields
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Request Obat")); // Titled border for the panel
+    panel.setBackground(new Color(240, 255, 240)); // Light green background
 
+    // Create text fields
+    JTextField namaObatField = new JTextField(20);
+    JTextField tanggalField = new JTextField(20);
+    JTextField quantityField = new JTextField(20);
+    JTextField idKaryawanField = new JTextField(20);
+
+    // Add labels and fields to the panel
+    panel.add(createLabelFieldPanel("Nama Obat:", namaObatField));
+    panel.add(createLabelFieldPanel("Tanggal (YYYY-MM-DD):", tanggalField));
+    panel.add(createLabelFieldPanel("Quantity:", quantityField));
+    panel.add(createLabelFieldPanel("ID Karyawan:", idKaryawanField));
+
+    // Show the dialog
+    int option = JOptionPane.showConfirmDialog(this, panel, "Masukkan Data Request Obat", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (option == JOptionPane.OK_OPTION) {
+        String nama_obat = namaObatField.getText();
+        String tanggal = tanggalField.getText();
+        String quantity = quantityField.getText();
+        String id_karyawan = idKaryawanField.getText();
+
+        // Call the method to handle the request
+        handleMedicineRequest(nama_obat, tanggal, quantity, id_karyawan);
+    }
+}
+
+// Helper method to create a label and text field panel
+private JPanel createLabelFieldPanel(String labelText, JTextField textField) {
+    JPanel panel = new JPanel();
+    panel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Aligns the components to the left
+    panel.setBackground(new Color(240, 255, 240)); // Light green background
+
+    JLabel label = new JLabel(labelText);
+    label.setPreferredSize(new Dimension(150, 25)); // Fixed width for labels
+
+    textField.setPreferredSize(new Dimension(200, 25)); // Fixed size for text fields
+
+    panel.add(label);
+    panel.add(textField);
+
+    return panel;
+}
+
+private void handleMedicineRequest(String nama_obat, String tanggal, String quantity, String id_karyawan) {
+    // Insert request logic here
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+        String sql = "INSERT INTO permintaan_obat (nama_obat, tanggal, quantity, id_karyawan) VALUES (?, ?, ?, ?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, nama_obat);
+        stmt.setString(2, tanggal);
+        stmt.setString(3, quantity);
+        stmt.setString(4, id_karyawan);
+
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Request obat berhasil dikirim");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+}
+
+private void reportPopUp() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createTitledBorder("Input Laporan"));
+    panel.setBackground(new Color(240, 255, 240)); // Light green background
+
+    JTextField tanggalField = new JTextField(20);
+    JTextField jenisLaporanField = new JTextField(20);
+    JTextField isiLaporanField = new JTextField(20);
+    JTextField idKaryawanField = new JTextField(20);
+    JTextField departemenField = new JTextField(20); // New field for departemen
+
+    panel.add(createLabelFieldPanel("Tanggal (YYYY-MM-DD):", tanggalField));
+    panel.add(createLabelFieldPanel("Jenis Laporan:", jenisLaporanField));
+    panel.add(createLabelFieldPanel("Isi Laporan:", isiLaporanField));
+    panel.add(createLabelFieldPanel("ID Karyawan:", idKaryawanField));
+    panel.add(createLabelFieldPanel("Departemen:", departemenField)); // Add departemen input
+
+    int option = JOptionPane.showConfirmDialog(this, panel, "Masukkan Data Laporan", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (option == JOptionPane.OK_OPTION) {
+        String tanggal_laporan = tanggalField.getText();
+        String jenis_laporan = jenisLaporanField.getText();
+        String isi_laporan = isiLaporanField.getText();
+        String idEmpl = idKaryawanField.getText();
+        String departemen = departemenField.getText(); // Retrieve departemen input
+
+        generateReport(tanggal_laporan, jenis_laporan, isi_laporan, idEmpl, departemen);
+    }
+}
+
+private void generateReport(String tanggal_laporan, String jenis_laporan, String isi_laporan, String idEmpl, String departemen) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+        String sql = "INSERT INTO laporan (tanggal_laporan, jenis_laporan, isi_laporan, idEmpl, departemen) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, tanggal_laporan);
+        stmt.setString(2, jenis_laporan);
+        stmt.setString(3, isi_laporan);
+        stmt.setString(4, idEmpl);
+        stmt.setString(5, departemen); // Insert departemen
+
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Laporan berhasil disimpan");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         displayAllObat(); // Panggil metode untuk menampilkan data obat
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        requestPopUp();         
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        reportPopUp();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

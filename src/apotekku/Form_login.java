@@ -32,7 +32,7 @@ public class Form_login extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Invalid password for Kasir");
                 }
                 break;
-            case "gudang":
+            case "Gudang":
                 if (password.equals("gudang123")) {
                     JOptionPane.showMessageDialog(this, "Login successful as Gudang");
                     new Gudang_Interfaces().setVisible(true);
@@ -41,16 +41,16 @@ public class Form_login extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Invalid password for Gudang");
                 }
                 break;
-            case "kepala_apotek":
+            case "Kepala_apotek":
                 if (password.equals("kepala123")) {
                     JOptionPane.showMessageDialog(this, "Login successful as Kepala Apotek");
                     new Founder_Interfaces().setVisible(true);
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid password for Kepala Apotek");
-                }
+                }   
                 break;
-            case "supplier":
+            case "Supplier":
                 if (password.equals("supplier123")) {
                     JOptionPane.showMessageDialog(this, "Login successful as Supplier");
                     new Supplier_Interfaces().setVisible(true);

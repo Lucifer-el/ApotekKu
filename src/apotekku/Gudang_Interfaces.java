@@ -150,7 +150,7 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 private void insertObatToDatabase(String id_obat, String nama_obat, String stok, String harga, String deskripsi, String id_karyawan) {
     // Koneksi database dan query INSERT ke tabel obat
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotekku", "root", "")) {
         String sql = "INSERT INTO obat (id_obat, nama_obat, stok, harga, deskripsi, id_karyawan) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, id_obat);
@@ -227,7 +227,7 @@ private void displayAllObat() {
         "ID Obat", "Nama Obat", "Stok", "Harga", "Deskripsi", "ID Karyawan"));
     dataObat.append("---------------------------------------------------------------------------------------\n");
 
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotekku", "root", "")) {
         String sql = "SELECT * FROM obat";
         PreparedStatement stmt = conn.prepareStatement(sql);
         java.sql.ResultSet rs = stmt.executeQuery();
@@ -310,7 +310,7 @@ private JPanel createLabelFieldPanel(String labelText, JTextField textField) {
 
 private void handleMedicineRequest(String nama_obat, String tanggal, String quantity, String id_karyawan) {
     // Insert request logic here
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotekku", "root", "")) {
         String sql = "INSERT INTO permintaan_obat (nama_obat, tanggal, quantity, id_karyawan) VALUES (?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, nama_obat);
@@ -357,7 +357,7 @@ private void reportPopUp() {
 }
 
 private void generateReport(String tanggal_laporan, String jenis_laporan, String isi_laporan, String idEmpl, String departemen) {
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotekku", "root", "")) {
         String sql = "INSERT INTO laporan (tanggal_laporan, jenis_laporan, isi_laporan, idEmpl, departemen) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, tanggal_laporan);

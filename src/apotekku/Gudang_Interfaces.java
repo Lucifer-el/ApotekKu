@@ -18,9 +18,7 @@ import java.sql.PreparedStatement;
  */
 public class Gudang_Interfaces extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Gudang_Interfaces
-     */
+    
     public Gudang_Interfaces() {
         initComponents();
         
@@ -40,6 +38,7 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -83,6 +82,17 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setBackground(new java.awt.Color(0, 153, 0));
+        jButton4.setFont(new java.awt.Font("Dubai Medium", 0, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 204));
+        jButton4.setText("Tambah Obat");
+        jButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -90,6 +100,7 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(33, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -111,7 +122,9 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addContainerGap(158, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(51, 255, 51));
@@ -148,12 +161,11 @@ public class Gudang_Interfaces extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-private void insertObatToDatabase(String id_obat, String nama_obat, String stok, String harga, String deskripsi, String id_karyawan) {
+private void insertObatToDatabase(String nama_obat, String stok, String harga, String deskripsi, String id_karyawan) {
     // Koneksi database dan query INSERT ke tabel obat
     try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
-        String sql = "INSERT INTO obat (id_obat, nama_obat, stok, harga, deskripsi, id_karyawan) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO obat (nama_obat, stok, harga, deskripsi, id_karyawan) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, id_obat);
         stmt.setString(2, nama_obat);
         stmt.setString(3, stok);
         stmt.setString(4, harga);
@@ -181,8 +193,6 @@ private void obatPopUp() {
     JTextField idKaryawanField = new JTextField(20);
 
     // Add labels and fields to the panel
-    panel.add(new JLabel("ID Obat:"));
-    panel.add(idObatField);
     panel.add(Box.createVerticalStrut(5)); // Add vertical space
     panel.add(new JLabel("Nama Obat:"));
     panel.add(namaObatField);
@@ -202,14 +212,13 @@ private void obatPopUp() {
     // Show the dialog
     int option = JOptionPane.showConfirmDialog(this, panel, "Masukkan Data Obat", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
     if (option == JOptionPane.OK_OPTION) {
-        String id_obat = idObatField.getText();
         String nama_obat = namaObatField.getText();
         String stok = stokField.getText();
         String harga = hargaField.getText();
         String deskripsi = deskripsiField.getText();
         String id_karyawan = idKaryawanField.getText();
 
-        insertObatToDatabase(id_obat, nama_obat, stok, harga, deskripsi, id_karyawan);
+        insertObatToDatabase(nama_obat, stok, harga, deskripsi, id_karyawan);
     }
 }
 
@@ -223,8 +232,8 @@ private void displayAllObat() {
     StringBuilder dataObat = new StringBuilder();
 
     // Adding header with fixed-width columns
-    dataObat.append(String.format("%-8s | %-15s | %-5s | %-8s | %-25s | %-12s\n", 
-        "ID Obat", "Nama Obat", "Stok", "Harga", "Deskripsi", "ID Karyawan"));
+    dataObat.append(String.format("%-15s | %-5s | %-8s | %-25s | %-12s\n", 
+        "nama_obat", "stok", "harga", "deskripsi", "id_karyawan"));
     dataObat.append("---------------------------------------------------------------------------------------\n");
 
     try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
@@ -234,15 +243,14 @@ private void displayAllObat() {
 
         // Menyusun setiap record ke dalam StringBuilder dengan alignment
         while (rs.next()) {
-            String id_obat = rs.getString("id_obat");
             String nama_obat = rs.getString("nama_obat");
             String stok = rs.getString("stok");
             String harga = rs.getString("harga");
             String deskripsi = rs.getString("deskripsi");
             String id_karyawan = rs.getString("id_karyawan");
 
-            dataObat.append(String.format("%-8s | %-15s | %-5s | %-8s | %-25s | %-12s\n",
-                id_obat, nama_obat, stok, harga, deskripsi, id_karyawan));
+            dataObat.append(String.format("%-15s | %-5s | %-8s | %-25s | %-12s\n",
+                nama_obat, stok, harga, deskripsi, id_karyawan));
         }
 
         // Menampilkan data dalam JOptionPane
@@ -373,6 +381,58 @@ private void generateReport(String tanggal_laporan, String jenis_laporan, String
         JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
     }
 }
+private void generateObat(String nama_obat, String stok, String harga, String deskripsi, String id_karyawan) {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+        String sql = "INSERT INTO obat (nama_obat, stok, harga, deskripsi, id_karyawan) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, nama_obat);
+        stmt.setInt(2, Integer.parseInt(stok));  // Konversi stok ke tipe integer
+        stmt.setDouble(3, Double.parseDouble(harga));  // Konversi harga ke tipe double
+        stmt.setString(4, deskripsi);
+        stmt.setString(5, id_karyawan);  // ID karyawan yang menambah obat
+
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Data obat berhasil ditambahkan");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+}
+
+
+private void obatPopUup() {
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createTitledBorder("Input Obat"));
+    panel.setBackground(new Color(240, 255, 240)); // Light green background
+
+    JTextField namaObatField = new JTextField(20);
+    JTextField stokField = new JTextField(20);
+    JTextField hargaField = new JTextField(20);
+    JTextField deskripsiField = new JTextField(20);
+    JTextField idKaryawanField = new JTextField(20); // Karyawan ID akan diambil otomatis
+
+    panel.add(createLabelFieldPanel("Nama Obat:", namaObatField));
+    panel.add(createLabelFieldPanel("Stok:", stokField));
+    panel.add(createLabelFieldPanel("Harga:", hargaField));
+    panel.add(createLabelFieldPanel("Deskripsi:", deskripsiField));
+    panel.add(createLabelFieldPanel("ID Karyawan:", idKaryawanField));  // Jika dibutuhkan
+
+    int option = JOptionPane.showConfirmDialog(this, panel, "Masukkan Data Obat", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (option == JOptionPane.OK_OPTION) {
+        String nama_obat = namaObatField.getText();
+        String stok = stokField.getText();
+        String harga = hargaField.getText();
+        String deskripsi = deskripsiField.getText();
+        String id_karyawan = idKaryawanField.getText();  // ID karyawan (jika diperlukan)
+
+        // Panggil fungsi generateObat untuk menambah data ke database
+        generateObat(nama_obat, stok, harga, deskripsi, id_karyawan);
+    }
+}
+
+
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         displayAllObat(); // Panggil metode untuk menampilkan data obat
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -384,6 +444,10 @@ private void generateReport(String tanggal_laporan, String jenis_laporan, String
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         reportPopUp();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+       obatPopUup();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -424,6 +488,7 @@ private void generateReport(String tanggal_laporan, String jenis_laporan, String
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

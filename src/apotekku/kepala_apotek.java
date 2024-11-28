@@ -156,13 +156,13 @@ public class kepala_apotek extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         // Contoh data untuk laporan
-    int id_laporan = 1; // Ganti dengan ID laporan yang sesuai
-    java.sql.Date tanggal_laporan = java.sql.Date.valueOf("2024-11-28"); // Contoh tanggal
-    String jenis_laporan = "Bulanan";
-    String isi_laporan = "Laporan penjualan bulan ini.";
-    int id_karyawan = 101; // Ganti dengan ID karyawan yang sesuai
+        int id_laporan = 1; // Ganti dengan ID laporan yang sesuai
+        java.sql.Date tanggal_laporan = java.sql.Date.valueOf("2024-11-28"); // Contoh tanggal
+        String jenis_laporan = "Bulanan";
+        String isi_laporan = "Laporan penjualan bulan ini.";
+        int id_karyawan = 101; // Ganti dengan ID karyawan yang sesuai
 
-    showLaporan(id_laporan, tanggal_laporan, jenis_laporan, isi_laporan, id_karyawan);
+        showLaporan(id_laporan, tanggal_laporan, jenis_laporan, isi_laporan, id_karyawan);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

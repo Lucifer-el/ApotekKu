@@ -44,7 +44,7 @@ public class Form_login extends javax.swing.JFrame {
             case "Kepala_apotek":
                 if (password.equals("kepala123")) {
                     JOptionPane.showMessageDialog(this, "Login successful as Kepala Apotek");
-                    new Founder_Interfaces().setVisible(true);
+                    new kepala_apotek().setVisible(true);
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Invalid password for Kepala Apotek");

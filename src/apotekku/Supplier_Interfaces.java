@@ -3,6 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package apotekku;
+import java.sql.ResultSet;
+import javax.swing.*;
+import java.sql.Statement;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextArea;
+import javax.swing.JOptionPane;
+import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
+import java.awt.Color;
+import javax.swing.Box;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  *
@@ -15,6 +32,8 @@ public class Supplier_Interfaces extends javax.swing.JFrame {
      */
     public Supplier_Interfaces() {
         initComponents();
+      
+
     }
 
     /**
@@ -26,21 +45,210 @@ public class Supplier_Interfaces extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(51, 255, 51));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 597, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel2.setBackground(new java.awt.Color(0, 153, 0));
+
+        jButton1.setBackground(new java.awt.Color(0, 153, 0));
+        jButton1.setFont(new java.awt.Font("Dubai Medium", 0, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 204));
+        jButton1.setText("Permintaan");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Dubai Medium", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 204));
+        jLabel1.setText("Supplier#1");
+
+        jButton2.setBackground(new java.awt.Color(0, 153, 0));
+        jButton2.setFont(new java.awt.Font("Dubai Medium", 0, 14)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 204));
+        jButton2.setText("Laporan");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(54, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(230, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void displayAllPermintaanObat() {
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+        // Query untuk mengambil seluruh data dari tabel permintaan_obat
+        String sql = "SELECT * FROM permintaan_obat";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+
+        // Membuat panel untuk menampilkan data
+        StringBuilder data = new StringBuilder();
+        data.append("ID Permintaan\tNama Obat\tJumlah\tTanggal\n");
+
+        while (rs.next()) {
+            String idPermintaan = rs.getString("id_permintaan");
+            String namaObat = rs.getString("nama_obat");
+            String jumlah = rs.getString("jumlah");
+            String tanggal = rs.getString("tanggal");
+            
+            // Menambahkan setiap baris data ke dalam string
+            data.append(idPermintaan).append("\t")
+                .append(namaObat).append("\t")
+                .append(jumlah).append("\t")
+                .append(tanggal).append("\n");
+        }
+
+        // Menampilkan data dalam dialog
+        JOptionPane.showMessageDialog(this, data.toString(), "Data Permintaan Obat", JOptionPane.INFORMATION_MESSAGE);
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+}
+
+    private void insertLaporanToDatabase(String tanggal_laporan, String jenis_laporan, String isi_laporan, String idEmpl, String departemen, boolean approve) {
+    // Koneksi database dan query INSERT ke tabel laporan
+    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_apotek", "root", "")) {
+        String sql = "INSERT INTO laporan (tanggal_laporan, jenis_laporan, isi_laporan, idEmpl, departemen, approve) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, tanggal_laporan);
+        stmt.setString(2, jenis_laporan);
+        stmt.setString(3, isi_laporan);
+        stmt.setString(4, idEmpl);
+        stmt.setString(5, departemen);
+        stmt.setBoolean(6, approve);  // Insert approve status
+
+        stmt.executeUpdate();
+        JOptionPane.showMessageDialog(this, "Laporan berhasil disimpan");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+}
+
+    private void laporanPopUp() {
+    // Create a panel for the input fields
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding
+
+    JTextField tanggalField = new JTextField(20);
+    JTextField jenisLaporanField = new JTextField(20);
+    JTextArea isiLaporanField = new JTextArea(5, 20);
+    JTextField idKaryawanField = new JTextField(20);
+    JTextField departemenField = new JTextField(20);
+    JCheckBox approveCheckBox = new JCheckBox("Approve");
+
+    // Make the checkbox completely invisible
+    approveCheckBox.setPreferredSize(new java.awt.Dimension(0, 0));
+    approveCheckBox.setMinimumSize(new java.awt.Dimension(0, 0));
+    approveCheckBox.setMaximumSize(new java.awt.Dimension(0, 0));
+    approveCheckBox.setVisible(false);
+
+    // Add labels and fields to the panel
+    panel.add(Box.createVerticalStrut(5)); // Add vertical space
+    panel.add(new JLabel("Tanggal Laporan:"));
+    panel.add(tanggalField);
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(new JLabel("Jenis Laporan:"));
+    panel.add(jenisLaporanField);
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(new JLabel("Isi Laporan:"));
+    panel.add(new JScrollPane(isiLaporanField)); // Make the text area scrollable
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(new JLabel("ID Karyawan:"));
+    panel.add(idKaryawanField);
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(new JLabel("Departemen:"));
+    panel.add(departemenField);
+    panel.add(Box.createVerticalStrut(5));
+    panel.add(approveCheckBox);  // Add the checkbox for approve (now invisible)
+
+    // Show the dialog
+    int option = JOptionPane.showConfirmDialog(this, panel, "Masukkan Data Laporan", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (option == JOptionPane.OK_OPTION) {
+        String tanggal_laporan = tanggalField.getText();
+        String jenis_laporan = jenisLaporanField.getText();
+        String isi_laporan = isiLaporanField.getText();
+        String idEmpl = idKaryawanField.getText();
+        String departemen = departemenField.getText();
+        boolean approve = approveCheckBox.isSelected();  // Value still works
+
+        insertLaporanToDatabase(tanggal_laporan, jenis_laporan, isi_laporan, idEmpl, departemen, approve);
+    }
+}
+
+
+
+
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        displayAllPermintaanObat();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            laporanPopUp(); 
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +286,10 @@ public class Supplier_Interfaces extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
 }
